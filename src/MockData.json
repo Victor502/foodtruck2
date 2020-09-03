@@ -1,0 +1,96 @@
+{
+  "Trucks": [
+    {
+      "id": 1,
+      "favTruck": true,
+      "latlng": {
+        "latitude": 38.255579,
+        "longitude": -85.753391
+      },
+      "title": "Johns Curry truck",
+      "description": "Best Truck in town",
+      "type": "EASTERN",
+      "url": "https://rh-vendoradmin.s3.amazonaws.com/trucks/original/18631/5a4fdd0f-88ec-4bce-835b-3b9b46204482.jpg"
+    },
+    {
+      "id": 2,
+      "favTruck": false,
+      "latlng": {
+        "latitude": 38.257202,
+        "longitude": -85.753955
+      },
+      "title": "Bob's taco truck",
+      "description": "Best Taco's for all",
+      "type": "LATIN",
+      "url": "https://rh-vendoradmin.s3.amazonaws.com/trucks/original/17953/59b9bdf4-8cd0-4b2d-ac25-1a0246204482.jpg"
+    },
+    {
+      "id": 3,
+      "favTruck": true,
+      "latlng": {
+        "latitude": 38.257617,
+        "longitude": -85.752929
+      },
+      "title": "Bill's Dogs",
+      "description": "Best Hot Dogs.",
+      "type": "AMERICAN",
+      "url": "https://rh-vendoradmin.s3.amazonaws.com/trucks/original/19089/5a9ef8aa-3230-41e9-a374-319346204482.jpg"
+    },
+    {
+      "id": 4,
+      "favTruck": true,
+      "latlng": {
+        "latitude": 38.256924,
+        "longitude": -85.749743
+      },
+      "title": "Hamburger Heaven",
+      "description": "Best Burger's for all",
+      "type": "AMERICAN",
+      "url": "https://rh-vendoradmin.s3.amazonaws.com/trucks/original/9606/5538314c-29f4-4ef8-b65d-1e9346204482.jpg"
+    },
+    {
+      "id": 5,
+      "favTruck": false,
+      "latlng": {
+        "latitude": 38.257137,
+        "longitude": -85.745694
+      },
+      "title": "Good Ole Food",
+      "description": "Good Ole food for all",
+      "type": "AMERICAN",
+      "url": "https://rh-vendoradmin.s3.amazonaws.com/trucks/original/1907/4e697835-829c-459b-8ad8-683446204482.jpg"
+    },
+    {
+      "id": 6,
+      "favTruck": true,
+      "latlng": {
+        "latitude": 38.257137,
+        "longitude": -85.745694
+      },
+      "title": "Good Ole Food",
+      "description": "Good Ole food for all",
+      "type": "AMERICAN",
+      "url": "https://rh-vendoradmin.s3.amazonaws.com/trucks/original/1907/4e697835-829c-459b-8ad8-683446204482.jpg"
+    }
+  ],
+  "Users": [
+    {
+      "id": 100,
+      "name": "Jon",
+      "url": "https://cdn.pixabay.com/photo/2015/12/09/04/27/a-single-person-1084191_1280.jpg",
+      "title": "I love food",
+      "favTrucks": [1, 3, 4, 6],
+      "vender": false,
+      "truckOwned": null
+    },
+    {
+      "id": 101,
+      "name": "Kelly",
+      "title": "I love food a lot",
+      "url": "https://media.newyorker.com/photos/5c3cda84f92c694343cc6fca/master/w_1023,c_limit/FestTranscript-Janet-Mock.jpg",
+      "favTrucks": [5],
+      "vender": true,
+      "truckOwned": 5
+    }
+  ]
+}
