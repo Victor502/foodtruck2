@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Page from '../common/Page';
 import TruckList from '../common/TruckList';
-import Theme from '../../config/Theme.js';
+import Theme from '../../style/Theme.js';
 import Data from '../../MockData';
 
 class HomeScreen extends Component {

@@ -6,7 +6,7 @@ import AccountStackNavigator from './components/account/AccountStackNavigator';
 import HomeStackNavigator from './components/home/HomeStackNavigator';
 import MapStackNavigator from './components/map/Index.js';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Theme from './config/Theme.js';
+import Theme from './style/Theme.js';
 
 const Tab = createBottomTabNavigator();
 

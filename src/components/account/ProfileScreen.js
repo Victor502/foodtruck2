@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View, ScrollView, Image, StyleSheet} from 'react-native';
 import Page from '../common/Page';
 
-import Theme from '../../config/Theme';
+import Theme from '../../style/Theme';
 // import FavTruckList from './FavTruckList';
 import TruckList from '../common/TruckList';
 import Data from '../../MockData';

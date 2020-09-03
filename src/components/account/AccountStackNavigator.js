@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ProfileScreen from './ProfileScreen';
 import FavTruckCard from './FavTruckCard';
-import Theme from '../../config/Theme.js';
+import Theme from '../../style/Theme.js';
 
 const Stack = createStackNavigator();
 
