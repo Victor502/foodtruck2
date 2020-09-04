@@ -22,6 +22,7 @@ const MapScreen = (props) => {
   const [truckMarkers, setTruckMarkers] = useState([]);
   const [mylatitude, setMylatitude] = useState(0);
   const [mylongitude, setMylongitude] = useState(0);
+  const [buttonNotWorking, setButtonNotWorking] = useState(1);
 
   useEffect(() => {
     getMyLocation();
@@ -54,7 +55,6 @@ const MapScreen = (props) => {
   };
 
   const markers = Data.Trucks.map((truck) => {
-
     return (
       <Marker
         key={truck.id}
@@ -68,8 +68,12 @@ const MapScreen = (props) => {
           <View>
             <View style={styles.bubble}>
               <Text style={styles.name}>{truck.title}</Text>
-              <Text style={{marginBottom: Platform.OS === 'ios' ? 10 : -30}}>{truck.description}</Text>
-              <Text style={{paddingBottom: Platform.OS === 'ios' ? 0 : 40}}><Image style={styles.image} source={{uri: truck.url}} /></Text>
+              <Text style={{marginBottom: Platform.OS === 'ios' ? 10 : -30}}>
+                {truck.description}
+              </Text>
+              <Text style={{paddingBottom: Platform.OS === 'ios' ? 0 : 40}}>
+                <Image style={styles.image} source={{uri: truck.url}} />
+              </Text>
             </View>
             <View style={styles.arrowBorder} />
             <View style={styles.arrow} />
@@ -88,14 +92,15 @@ const MapScreen = (props) => {
             showsUserLocation
             followsUserLocation
             showsMyLocationButton
-            style={styles.mapContainer}
+            style={[styles.mapContainer, {marginBottom: buttonNotWorking}]}
             initialRegion={{
               latitude: 38.25667, // mylatitude,
               longitude: -85.7514, // mylongitude,
               latitudeDelta: 0.005,
               longitudeDelta: 0.005,
             }}
-            loadingEnabled={true}>
+            loadingEnabled={true}
+            onMapReady={() => setButtonNotWorking(0)}>
             {markers}
           </MapView>
         )}
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
   image: {
     width: 120,
     height: 80,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   searchBox: {
     position: 'absolute',
