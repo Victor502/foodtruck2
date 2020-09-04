@@ -92,5 +92,13 @@
       "vender": true,
       "truckOwned": 5
     }
+  ],
+  "Categories": [
+    {"name": "Chinese"},
+    {"name": "American"},
+    {"name": "Korean"},
+    {"name": "Indian"},
+    {"name": "BBQ"},
+    {"name": "SeaFood"}
   ]
 }

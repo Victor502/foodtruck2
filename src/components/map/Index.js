@@ -1,9 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
+  TouchableOpacity,
+  TextInput,
+  Animated,
+  ScrollView,
   Image,
   Platform,
   Dimensions,
@@ -12,6 +16,7 @@ import Page from '../common/Page';
 import MapView, {Marker, PROVIDER_GOOGLE, Callout} from 'react-native-maps';
 import Data from '../../MockData';
 import RNLocation from 'react-native-location';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('window');
 const CARD_HEIGHT = 220;
@@ -24,9 +29,71 @@ const MapScreen = (props) => {
   const [mylongitude, setMylongitude] = useState(0);
   const [buttonNotWorking, setButtonNotWorking] = useState(1);
 
+  const _map = useRef(null);
+  const _scrollView = useRef(null);
+
+  let mapIndex = 0;
+  let mapAnimation = new Animated.Value(0);
+
+  useEffect(() => {
+    mapAnimation.addListener(({value}) => {
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+      if (index >= Data.Trucks.length) {
+        index = Data.Trucks.length - 1;
+      }
+      if (index <= 0) {
+        index = 0;
+      }
+
+      clearTimeout(regionTimeout);
+
+      const regionTimeout = setTimeout(() => {
+        if (mapIndex !== index) {
+          mapIndex = index;
+          const {latlng} = Data.Trucks[index];
+          _map.current.animateToRegion(
+            {
+              ...latlng,
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            },
+            350,
+          );
+        }
+      }, 10);
+    });
+  });
+
+  const interpolations = Data.Trucks.map((marker, index) => {
+    const inputRange = [
+      (index - 1) * CARD_WIDTH,
+      index * CARD_WIDTH,
+      (index + 1) * CARD_WIDTH,
+    ];
+
+    const scale = mapAnimation.interpolate({
+      inputRange,
+      outputRange: [1, 1.5, 1],
+      extrapolate: 'clamp',
+    });
+
+    return {scale};
+  });
+
   useEffect(() => {
     getMyLocation();
   }, []);
+
+  const onMarkerPress = (mapEventData) => {
+    const markerID = mapEventData._targetInst.return.index;
+
+    let x = markerID * CARD_WIDTH + markerID * 20;
+    if (Platform.OS === 'ios') {
+      x = x - SPACING_FOR_CARD_INSET;
+    }
+
+    _scrollView.current.scrollTo({x: x, y: 0, animated: true});
+  };
 
   const getMyLocation = async () => {
     try {
@@ -54,16 +121,28 @@ const MapScreen = (props) => {
     }
   };
 
-  const markers = Data.Trucks.map((truck) => {
+  const markers = Data.Trucks.map((truck, index) => {
+    const scaleStyle = {
+      transform: [
+        {
+          scale: interpolations[index].scale,
+        },
+      ],
+    };
     return (
       <Marker
         key={truck.id}
         coordinate={truck.latlng}
-        // title={truck.title}
-        // description={truck.description}
-        image={require('../../assets/images/map_marker.png')}
-        // pinColor="red"
+        onPress={(e) => onMarkerPress(e)}
+        // image={require('../../assets/images/map_marker.png')}
       >
+        <Animated.View style={[styles.markerWrap]}>
+          <Animated.Image
+            source={require('../../assets/images/map_marker.png')}
+            style={[styles.marker, scaleStyle]}
+            resizeMode="cover"
+          />
+        </Animated.View>
         <Callout tooltip>
           <View>
             <View style={styles.bubble}>
@@ -84,28 +163,111 @@ const MapScreen = (props) => {
   });
 
   return (
-    <Page>
-      <View style={styles.container}>
-        {mylatitude !== 0 && (
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            showsUserLocation
-            followsUserLocation
-            showsMyLocationButton
-            style={[styles.mapContainer, {marginBottom: buttonNotWorking}]}
-            initialRegion={{
-              latitude: 38.25667, // mylatitude,
-              longitude: -85.7514, // mylongitude,
-              latitudeDelta: 0.005,
-              longitudeDelta: 0.005,
-            }}
-            loadingEnabled={true}
-            onMapReady={() => setButtonNotWorking(0)}>
-            {markers}
-          </MapView>
-        )}
+    <View style={styles.container}>
+      {mylatitude !== 0 && (
+        <MapView
+          ref={_map}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          followsUserLocation
+          showsMyLocationButton
+          style={[styles.mapContainer, {marginBottom: buttonNotWorking}]}
+          initialRegion={{
+            latitude: 38.25667, // mylatitude,
+            longitude: -85.7514, // mylongitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+          loadingEnabled={true}
+          onMapReady={() => setButtonNotWorking(0)}>
+          {markers}
+        </MapView>
+      )}
+      <View style={styles.searchBox}>
+        <TextInput
+          placeholder={'Search Here'}
+          placeholderTextColor={'#000'}
+          autoCapitalization={'none'}
+          style={{flex: 1, padding: 0}}
+        />
+        <Ionicons name="search" size={20} />
       </View>
-    </Page>
+      <ScrollView
+        horizontal
+        scrollEventThrottle={1}
+        showsHorizontalScrollIndicator={false}
+        height={50}
+        style={styles.chipsScrollView}
+        contentInset={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 20,
+        }}
+        contentContainerStyle={{
+          paddingRight: Platform.OS === 'android' ? 20 : 0,
+        }}>
+        {Data.Categories.map((category, index) => (
+          <TouchableOpacity key={index} style={styles.chipsItem}>
+            <Text>{category.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <Animated.ScrollView
+        ref={_scrollView}
+        horizontal
+        scrollEventThrottle={1}
+        showsHorizontalScrollIndicator={false}
+        style={styles.scrollView}
+        decelerationRate={'fast'}
+        snapToInterval={CARD_WIDTH + 20}
+        snapToAlignment={'center'}
+        contentInset={{
+          top: 0,
+          left: SPACING_FOR_CARD_INSET,
+          bottom: 0,
+          right: SPACING_FOR_CARD_INSET,
+        }}
+        contentContainerStyle={{
+          paddingHorizontal:
+            Platform.OS === 'android' ? SPACING_FOR_CARD_INSET : 0,
+        }}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  x: mapAnimation,
+                },
+              },
+            },
+          ],
+          {useNativeDriver: true},
+        )}>
+        {Data.Trucks.map((truck, index) => (
+          <View style={styles.card} key={index}>
+            <Image
+              style={styles.cardImage}
+              source={{uri: truck.url}}
+              resizeMode={'cover'}
+            />
+            <View style={styles.textContent}>
+              <Text numberOfLines={1} style={styles.cardtitle}>
+                {truck.title}
+              </Text>
+              <Text numberOfLines={1} style={styles.cardDescription}>
+                {truck.description}
+              </Text>
+              <View style={styles.button}>
+                <TouchableOpacity onPress={() => {}} style={styles.signIn}>
+                  <Text style={styles.textSign}>Order Now</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </Animated.ScrollView>
+    </View>
   );
 };
 
@@ -263,10 +425,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
+    borderColor: '#FF6347',
+    borderWidth: 1,
   },
   textSign: {
     fontSize: 14,
     fontWeight: 'bold',
+    color: '#FF6347',
   },
 });
 
