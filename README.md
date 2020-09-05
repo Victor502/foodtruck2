@@ -9,3 +9,4 @@
  - react-native-location
  - react-navigation
  - react-native-vector-icons
+ - react-native-community/async-storage 

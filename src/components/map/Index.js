@@ -208,7 +208,7 @@ const MapScreen = (props) => {
           paddingRight: Platform.OS === 'android' ? 20 : 0,
         }}>
         {Data.Categories.map((category, index) => (
-          <TouchableOpacity key={index} style={styles.chipsItem}>
+          <TouchableOpacity key={index} style={styles.chipsItem} onPress={()=> {}}>
             <Text>{category.name}</Text>
           </TouchableOpacity>
         ))}
@@ -260,7 +260,7 @@ const MapScreen = (props) => {
               </Text>
               <View style={styles.button}>
                 <TouchableOpacity onPress={() => {}} style={styles.signIn}>
-                  <Text style={styles.textSign}>Order Now</Text>
+                  <Text style={styles.textSign}>More Info</Text>
                 </TouchableOpacity>
               </View>
             </View>
