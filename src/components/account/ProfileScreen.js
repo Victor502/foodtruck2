@@ -8,7 +8,7 @@ import TruckList from '../common/TruckList';
 import Data from '../../MockData';
 import VendorTruckInfo from '../common/VendorTruckInfo';
 
-const noImage = require('../../assets/NoImage.png');
+const noImage = require('../../assets/images/NoImage.png');
 
 const favTrucks = Data.Trucks.filter((truck) => truck.favTruck === true);
 const user = Data.Users[0];
