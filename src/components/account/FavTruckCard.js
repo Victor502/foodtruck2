@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {ScrollView, View, Text, Image, StyleSheet} from 'react-native';
 import Page from '../common/Page';
 
-const noTruckImage = require('../../assets/mock/Trucks/noTruckImage.jpg');
+const noTruckImage = require('../../assets/images/noTruckImage.jpg');
 
 const FavTruckCard = (props) => {
   const data = props.route.params.data;

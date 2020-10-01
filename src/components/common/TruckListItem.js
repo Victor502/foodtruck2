@@ -3,7 +3,7 @@ import {Image, View, Text, TouchableOpacity, StyleSheet, Pressable} from 'react-
 import {useNavigation} from '@react-navigation/native';
 // import {useRoute} from '@react-navigation/native';
 
-const noTruckImage = require('../../assets/mock/Trucks/noTruckImage.jpg');
+const noTruckImage = require('../../assets/images/noTruckImage.jpg');
 
 const TruckListItem = (props) => {
   const navigation = useNavigation();
